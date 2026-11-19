@@ -1,0 +1,384 @@
+// TaskPilot schema. SQLite stores enum-like values as strings; the allowed values
+// are defined and validated in src/lib/constants.ts + src/lib/validators.ts (Zod).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model LocalProfile {
+  id          String   @id @default(uuid())
+  displayName String   @default("Me")
+  timezone    String   @default("Asia/Jakarta")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UserPreference {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  owner       String?
+  category    String?
+  priority    String   @default("Medium")
+  status      String   @default("Active")
+  startDate   DateTime?
+  targetDate  DateTime?
+  risks       String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tasks      Task[]
+  milestones ProjectMilestone[]
+  uatFeatures UatFeature[]
+  issues     Issue[]
+
+  @@index([status])
+}
+
+model ProjectMilestone {
+  id          String    @id @default(uuid())
+  projectId   String
+  title       String
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Task {
+  id                  String    @id @default(uuid())
+  seq                 Int       @unique
+  title               String
+  description         String?
+  projectId           String?
+  category            String    @default("Other")
+  priority            String    @default("Medium")
+  status              String    @default("To Do")
+  startDate           DateTime?
+  dueDate             DateTime?
+  assignee            String?
+  stakeholder         String?
+  estimatedMinutes    Int?
+  actualMinutes       Int?
+  progress            Int       @default(0)
+  businessImportance  Int       @default(3)
+  nextAction          String?
+  nextActionDue       DateTime?
+  blockerDescription  String?
+  blockedAt           DateTime?
+  waitingFor          String?
+  followUpDate        DateTime?
+  notes               String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  completedAt         DateTime?
+
+  project      Project?         @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  subtasks     Subtask[]
+  comments     TaskComment[]
+  activities   TaskActivity[]
+  tags         TaskTag[]
+  attachments  TaskAttachment[]
+  nextActions  NextAction[]
+  reminders    Reminder[]
+  planItems    PlanItem[]
+  dependsOn    TaskDependency[] @relation("DependentTask")
+  blocking     TaskDependency[] @relation("DependencyTask")
+
+  @@index([status])
+  @@index([priority])
+  @@index([dueDate])
+  @@index([projectId])
+  @@index([followUpDate])
+  @@index([completedAt])
+}
+
+model Subtask {
+  id          String    @id @default(uuid())
+  taskId      String
+  title       String
+  done        Boolean   @default(false)
+  position    Int       @default(0)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+}
+
+model TaskDependency {
+  id               String   @id @default(uuid())
+  taskId           String
+  dependsOnTaskId  String
+  createdAt        DateTime @default(now())
+
+  task      Task @relation("DependentTask", fields: [taskId], references: [id], onDelete: Cascade)
+  dependsOn Task @relation("DependencyTask", fields: [dependsOnTaskId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, dependsOnTaskId])
+}
+
+model NextAction {
+  id          String    @id @default(uuid())
+  taskId      String
+  kind        String
+  text        String
+  score       Int       @default(0)
+  reason      String?
+  status      String    @default("Open") // Override | Done | Postponed | Replaced | Cleared
+  pinned      Boolean   @default(false)
+  postponedTo DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([status])
+}
+
+model TaskActivity {
+  id        String   @id @default(uuid())
+  taskId    String?
+  projectId String?
+  type      String
+  message   String
+  meta      String?
+  createdAt DateTime @default(now())
+
+  task Task? @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([taskId])
+  @@index([projectId])
+  @@index([createdAt])
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  tasks TaskTag[]
+}
+
+model TaskTag {
+  taskId String
+  tagId  String
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, tagId])
+}
+
+model TaskAttachment {
+  id         String   @id @default(uuid())
+  taskId     String
+  fileName   String
+  filePath   String
+  mimeType   String?
+  sizeBytes  Int?
+  createdAt  DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+}
+
+model UatFeature {
+  id               String    @id @default(uuid())
+  projectId        String?
+  name             String
+  releaseVersion   String?
+  environment      String?
+  owner            String?
+  startDate        DateTime?
+  targetDate       DateTime?
+  status           String    @default("Not Started")
+  signOffStatus    String    @default("Pending") // Pending | Requested | Signed Off | Rejected
+  remarks          String?
+  fixDeployedAt    DateTime?
+  /// Used only while the feature has no individual test cases.
+  manualTotal      Int?
+  manualPassed     Int?
+  manualFailed     Int?
+  manualBlocked    Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  project   Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  testCases UatTestCase[]
+  reminders Reminder[]
+
+  @@index([projectId])
+}
+
+model UatTestCase {
+  id             String   @id @default(uuid())
+  featureId      String
+  title          String
+  prerequisites  String?
+  steps          String?
+  expectedResult String?
+  actualResult   String?
+  result         String   @default("Not Run")
+  remarks        String?
+  linkedBug      String?
+  linkedIssueId  String?
+  position       Int      @default(0)
+  retestCount    Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  feature     UatFeature    @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  linkedIssue Issue?        @relation(fields: [linkedIssueId], references: [id], onDelete: SetNull)
+  evidence    UatEvidence[]
+
+  @@index([featureId])
+  @@index([result])
+}
+
+model UatEvidence {
+  id         String   @id @default(uuid())
+  testCaseId String
+  fileName   String
+  filePath   String
+  mimeType   String?
+  sizeBytes  Int?
+  createdAt  DateTime @default(now())
+
+  testCase UatTestCase @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+
+  @@index([testCaseId])
+}
+
+model Issue {
+  id                   String    @id @default(uuid())
+  seq                  Int       @unique
+  title                String
+  description          String?
+  projectId            String?
+  category             String?
+  severity             String    @default("Medium")
+  reportedBy           String?
+  responsiblePic       String?
+  reportedDate         DateTime  @default(now())
+  status               String    @default("Reported")
+  rootCause            String?
+  impact               String?
+  workaround           String?
+  expectedResolution   DateTime?
+  actualResolution     DateTime?
+  nextFollowUpDate     DateTime?
+  latestUpdate         String?
+  escalationLevel      Int       @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  project   Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  updates   IssueUpdate[]
+  testCases UatTestCase[]
+  reminders Reminder[]
+
+  @@index([status])
+  @@index([projectId])
+}
+
+model IssueUpdate {
+  id        String   @id @default(uuid())
+  issueId   String
+  kind      String   @default("Update")
+  message   String
+  filePath  String?
+  fileName  String?
+  mimeType  String?
+  sizeBytes Int?
+  createdAt DateTime @default(now())
+
+  issue Issue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([issueId])
+}
+
+model Reminder {
+  id          String    @id @default(uuid())
+  taskId      String?
+  issueId     String?
+  uatFeatureId String?
+  type        String
+  message     String
+  dueAt       DateTime
+  snoozedUntil DateTime?
+  dismissedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  task       Task?       @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  issue      Issue?      @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  uatFeature UatFeature? @relation(fields: [uatFeatureId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, type])
+  @@unique([issueId, type])
+  @@unique([uatFeatureId, type])
+  @@index([dueAt])
+}
+
+/// A task the user chose to work on for a given calendar day (Asia/Jakarta, yyyy-MM-dd).
+model PlanItem {
+  id            String    @id @default(uuid())
+  date          String
+  taskId        String
+  position      Int       @default(0)
+  status        String    @default("Planned") // Planned | Done | Dropped
+  doneAt        DateTime?
+  workedMinutes Int       @default(0)
+  note          String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@unique([date, taskId])
+  @@index([date])
+}
+
+model DailyNote {
+  id        String   @id @default(uuid())
+  date      String   @unique
+  note      String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

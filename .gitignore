@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# generated Prisma client (re-created by `npm install` / `npm run db:generate`)
+src/generated/
+
+# secrets
+.env
+.env.local
+.env.*.local
+
+# personal data: never commit
+data/*
+!data/.gitkeep
+uploads/*
+!uploads/.gitkeep
+backups/
+*.db
+*.db-journal
+*.sqlite
+
+# misc
+.DS_Store
+npm-debug.log*
+coverage/
