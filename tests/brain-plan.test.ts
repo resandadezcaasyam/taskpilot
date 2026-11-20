@@ -72,6 +72,12 @@ describe("what to do with each line", () => {
     expect(buildUpdate(r.values, new Set(r.explicit), known.tasks[3]).problem).toMatch(/need a reason/);
     expect(buildUpdate(one("blocked: Standup => no room").values, new Set(one("blocked: Standup => no room").explicit), known.tasks[3]).problem).toBeUndefined();
   });
+  it("a guessed project never turns an existing task into an 'update'", () => {
+    const withVendor: KnownData = { ...known, projects: [...known.projects, { id: "v", name: "Inter-island Vendor Compliance" }], tasks: [...known.tasks, task(6, "Review kontrak vendor", { status: "Backlog" })] };
+    const r = plan("Review kontrak vendor", withVendor)[0];
+    expect(r.action).toEqual({ kind: "skip", reason: "Already exists as TP-0006" });
+    expect(r.values.projectId).toBe(""); // not even guessed: "vendor" alone is too weak for a 3-word project
+  });
   it("does everything together on a messy paste, in one pass", () => {
     const rows = plan(`# Today
 - [x] revew PRD v2

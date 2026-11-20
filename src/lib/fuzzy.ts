@@ -102,7 +102,15 @@ export function snapName(name: string, known: readonly string[]): string {
     const kn = normalize(k);
     return closeEnough(compact, kn.replace(/ /g, "")) || (single && kn.split(" ").some((t) => t.length >= 4 && closeEnough(n, t)));
   });
-  return close.length === 1 ? close[0] : name;
+  if (close.length === 1) return close[0];
+  // "Andi" and "Andi (Engineering)" are the same person written two ways: prefer the shortest when it is contained in the others
+  if (close.length > 1) {
+    const words = (k: string) => tokens(k.replace(/\(.*?\)/g, " "), false);
+    const sorted = [...close].sort((a, b) => normalize(a).length - normalize(b).length);
+    const base = words(sorted[0]);
+    if (sorted.every((k) => base.every((w) => words(k).some((x) => closeEnough(w, x))))) return sorted[0];
+  }
+  return name;
 }
 
 // ---------------------------------------------------------------- typo repair for the words the parser understands

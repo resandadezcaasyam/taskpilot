@@ -11,6 +11,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/tasks", label: "My Tasks", icon: "list-checks" },
   { href: "/capture", label: "Brain Dump", icon: "zap" },
   { href: "/next-actions", label: "Next Actions", icon: "compass" },
+  { href: "/weekly", label: "Weekly Report", icon: "mail" },
   { href: "/today", label: "Today Planner", icon: "sun" },
   { href: "/projects", label: "Projects", icon: "folder-kanban" },
   { href: "/kanban", label: "Kanban Board", icon: "columns-3" },

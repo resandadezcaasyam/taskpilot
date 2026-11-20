@@ -241,12 +241,11 @@ export function BrainDump({ known, routine: initialRoutine, recentTitles }: { kn
             <Button onClick={submit} disabled={busy || ready.length === 0}>{busy ? "Saving…" : label}</Button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] text-sm">
+            <table className="w-full min-w-[900px] text-sm">
               <thead>
                 <tr className="border-y border-border text-left text-xs text-muted-foreground">
-                  <th className="w-52 px-4 py-2 font-medium">Action</th><th className="px-2 py-2 font-medium">Title</th><th className="px-2 py-2 font-medium">Project</th>
-                  <th className="px-2 py-2 font-medium">Priority</th><th className="px-2 py-2 font-medium">Status</th><th className="px-2 py-2 font-medium">Due</th>
-                  <th className="px-2 py-2 font-medium">Follow-up</th><th className="w-20 px-2 py-2 font-medium">Est. (h)</th>
+                  <th className="w-52 px-4 py-2 font-medium">Action</th><th className="min-w-[340px] px-2 py-2 font-medium">Title</th><th className="px-2 py-2 font-medium">Project</th>
+                  <th className="px-2 py-2 font-medium">Priority</th><th className="px-2 py-2 font-medium">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -280,6 +279,17 @@ export function BrainDump({ known, routine: initialRoutine, recentTitles }: { kn
                             <button type="button" className="underline" onClick={() => setChoices((c) => ({ ...c, [r.key]: `update:${unselectedMatch.task.id}` }))}>Update that one instead</button>
                           </p>
                         )}
+                        <div className="flex flex-wrap items-end gap-2">
+                          <label className="space-y-0.5 text-[11px] text-muted-foreground">Due
+                            <Input type="date" aria-label={`Due date for line ${i + 1}`} value={r.values.dueDate} onChange={(e) => edit(r.key, { dueDate: e.target.value })} className="h-7 w-32 px-2 text-xs" />
+                          </label>
+                          <label className="space-y-0.5 text-[11px] text-muted-foreground">Follow-up
+                            <Input type="date" aria-label={`Follow-up date for line ${i + 1}`} value={r.values.followUpDate} onChange={(e) => edit(r.key, { followUpDate: e.target.value })} className="h-7 w-32 px-2 text-xs" />
+                          </label>
+                          <label className="space-y-0.5 text-[11px] text-muted-foreground">Est. (h)
+                            <Input inputMode="decimal" aria-label={`Estimate in hours for line ${i + 1}`} value={r.values.estimatedHours} onChange={(e) => edit(r.key, { estimatedHours: e.target.value })} className="h-7 w-16 px-2 text-xs" />
+                          </label>
+                        </div>
                         <p className="flex flex-wrap gap-x-2 text-[11px] text-muted-foreground">
                           {r.detected.map((d) => <span key={d}>{d}</span>)}
                           {r.values.nextAction && <span>Next: {r.values.nextAction}</span>}
@@ -310,9 +320,6 @@ export function BrainDump({ known, routine: initialRoutine, recentTitles }: { kn
                           {ROW_STATUSES.map((s) => <option key={s}>{s}</option>)}
                         </Select>
                       </td>
-                      <td className="px-2 py-2"><Input type="date" aria-label={`Due date for line ${i + 1}`} value={r.values.dueDate} onChange={(e) => edit(r.key, { dueDate: e.target.value })} className="h-8 w-36 text-xs" /></td>
-                      <td className="px-2 py-2"><Input type="date" aria-label={`Follow-up date for line ${i + 1}`} value={r.values.followUpDate} onChange={(e) => edit(r.key, { followUpDate: e.target.value })} className="h-8 w-36 text-xs" /></td>
-                      <td className="px-2 py-2"><Input inputMode="decimal" aria-label={`Estimate in hours for line ${i + 1}`} value={r.values.estimatedHours} onChange={(e) => edit(r.key, { estimatedHours: e.target.value })} className="h-8 w-16 text-xs" /></td>
                     </tr>
                   );
                 })}

@@ -75,6 +75,8 @@ Bullets, numbering, blank lines and `# headings` are ignored, so you can paste f
 
 **Projects.** Ongoing and completed views, progress, blockers, milestones, task list, UAT features, open issues and an activity timeline.
 
+**Weekly Report** (`/weekly`). Writes your weekly update email from your data: **Done last week** (tasks finished and UAT features signed off), **This week** (open work, with status, progress, your "next action" as `target:` and an expected finish weekday), and **Blocked / At risk** (blocked tasks with their blocker, long waits, overdue work, serious issues). Pick the week (it chooses sensibly by weekday), untick or reword any line, add your own, set To/Cc/greeting and the "Product Dash updated" line, then **Copy email** (bullets survive pasting into Gmail/Outlook). The wording, headings and signature are a template you save once. TaskPilot never sends email.
+
 **Next Actions** (`/next-actions`). Every open task gets a 0-100 priority score, a recommendation type, a concrete action, the reason, estimated duration and execution order. Buttons: Start now, Mark action complete (never completes the task), Postpone, Follow up, Override (optionally pinned), View task. UAT and issue next steps appear here too.
 
 **Today Planner** (`/today`). Must do, Follow up, Recommended focus, Quick wins and Upcoming, plus your own plan for the day with drag-and-drop ordering, "log work", reschedule, a daily progress and workload indicator, autosaved notes, and a Carried over list so unfinished work is never lost.

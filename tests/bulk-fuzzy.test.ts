@@ -61,6 +61,15 @@ describe("a project mentioned in plain words is found (typos allowed)", () => {
     expect(one("UAT dashboard check").values.projectId).toBe("");
     expect(one("Review booking flow #uat").values.projectId).toBe("p1"); // "booking" is distinctive
   });
+  it("a long project name needs more than one of its words, and a guess is never 'explicit'", () => {
+    const long = ctx({ projects: [{ id: "v", name: "Inter-island Vendor Compliance" }, { id: "p2", name: "HSE Portal" }] });
+    expect(one("Review kontrak vendor", long).values.projectId).toBe("");
+    expect(one("Vendor compliance check", long).values.projectId).toBe("v");
+    const guessed = one("Retest bokking cases");
+    expect(guessed.values.projectId).toBe("p1");
+    expect(guessed.explicit).not.toContain("projectId");
+    expect(one("Retest cases @booking").explicit).toContain("projectId"); // typed by the user
+  });
   it("the page default is the fallback, not an override", () => {
     expect(one("Retest bokking cases", ctx({ defaults: { status: "To Do", priority: "Medium", category: "Other", projectId: "p2" } })).values.projectId).toBe("p1");
     expect(one("Buy coffee", ctx({ defaults: { status: "To Do", priority: "Medium", category: "Other", projectId: "p2" } })).values.projectId).toBe("p2");

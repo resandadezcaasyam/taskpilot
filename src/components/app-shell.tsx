@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   BarChart3, CalendarDays, Columns3, Compass, FlaskConical, FolderKanban, History, Hourglass,
-  LayoutDashboard, ListChecks, Menu, Moon, Plus, Search, Settings, Siren, Sun, X, Zap, type LucideIcon,
+  LayoutDashboard, ListChecks, Mail, Menu, Moon, Plus, Search, Settings, Siren, Sun, X, Zap, type LucideIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 const ICONS: Record<string, LucideIcon> = {
   "layout-dashboard": LayoutDashboard, "list-checks": ListChecks, compass: Compass, sun: Sun,
   "folder-kanban": FolderKanban, "columns-3": Columns3, "flask-conical": FlaskConical, siren: Siren,
-  hourglass: Hourglass, "calendar-days": CalendarDays, "bar-chart-3": BarChart3, history: History, settings: Settings, zap: Zap,
+  hourglass: Hourglass, "calendar-days": CalendarDays, "bar-chart-3": BarChart3, history: History, settings: Settings, zap: Zap, mail: Mail,
 };
 
 export function AppShell({

@@ -125,7 +125,13 @@ export function guessProject(text: string, projects: { id: string; name: string 
   const withTokens = projects.map((p) => ({ p, toks: [...new Set(tokens(p.name).filter((t) => t.length >= 3 && !GENERIC_PROJECT_WORDS.has(t)))] }));
   const df = new Map<string, number>();
   for (const { toks } of withTokens) for (const t of toks) df.set(t, (df.get(t) ?? 0) + 1);
-  const hits = withTokens.filter(({ toks }) => toks.some((t) => df.get(t) === 1 && words.some((w) => (t.length >= 4 ? closeEnough(w, t) : w === t))));
+  // a project is only "mentioned" if at least half of its distinctive words appear (one word is enough for short names,
+  // but "vendor" alone must not pull a line into "Inter-island Vendor Compliance")
+  const hits = withTokens.filter(({ toks }) => {
+    const distinctive = toks.filter((t) => df.get(t) === 1);
+    const matched = distinctive.filter((t) => words.some((w) => (t.length >= 4 ? closeEnough(w, t) : w === t))).length;
+    return matched >= Math.max(1, Math.ceil(distinctive.length / 2));
+  });
   return hits.length === 1 ? hits[0].p : null;
 }
 
@@ -266,7 +272,7 @@ function parseLine(raw: string, ctx: BrainDumpContext, now: Date): Omit<ParsedLi
     const guess = guessProject(q.title, ctx.projects);
     if (guess) {
       projectId = guess.id;
-      explicit.add("projectId");
+      // a guess is only used for NEW tasks; it never changes the project of an existing task, so it is not "explicit"
       detected.push(`Project (guessed from the text): ${guess.name}`);
     }
   }

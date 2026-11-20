@@ -49,6 +49,12 @@ describe("snapName", () => {
     expect(snapName("ANDI", people)).toBe("Andi");
     expect(snapName("sary", people)).toBe("Sari Wulandari");
   });
+  it("joins two spellings of the same person, but never two different people", () => {
+    expect(snapName("andy", ["Andi (Engineering)", "Andi"])).toBe("Andi");
+    expect(snapName("andi", ["Andi (Engineering)", "Andi"])).toBe("Andi");
+    expect(snapName("budi", ["Budi Santoso", "Budi Hartono"])).toBe("budi");
+    expect(snapName("budy", ["Budi Santoso", "Budi Hartono"])).toBe("budy");
+  });
   it("expands a unique first name; leaves ambiguous or unknown names alone", () => {
     expect(snapName("sari", people)).toBe("Sari Wulandari");
     expect(snapName("budi", people)).toBe("budi"); // two Budis

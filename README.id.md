@@ -67,6 +67,7 @@ Salin file versi baru ke folder proyek dengan **tetap menjaga** `data/`, `upload
 | My Tasks | `/tasks` | Semua task: cari, filter, ubah status, aksi massal |
 | Brain Dump | `/capture` | **Cara tercepat** memasukkan banyak kegiatan sekaligus dari teks |
 | Next Actions | `/next-actions` | "Apa yang sebaiknya saya kerjakan sekarang?" lengkap dengan alasannya |
+| Weekly Report | `/weekly` | **Email update mingguan otomatis**: apa yang selesai minggu lalu, rencana minggu ini, dan yang terhambat |
 | Today Planner | `/today` | Rencana hari ini: pilih, urutkan, catat kerja, catatan harian |
 | Projects | `/projects` | Proyek, progres, milestone, UAT dan issue terkait |
 | Kanban Board | `/kanban` | Papan kolom status, geser kartu untuk mengubah status |
@@ -102,6 +103,7 @@ Salin file versi baru ke folder proyek dengan **tetap menjaga** `data/`, `upload
 3. Tulis catatan hari ini di kotak **Notes for today** (tersimpan otomatis).
 
 **Mingguan**
+- Buka **Weekly Report** (Senin atau Selasa pagi, atau Jumat sore untuk minggu depan): periksa isinya, klik **Copy email**, tempel ke email Anda.
 - **Analytics** untuk melihat tren, **Projects** untuk kesehatan proyek, **Settings, Data and backup** untuk memastikan cadangan ada.
 
 ---
@@ -210,6 +212,46 @@ Di bawahnya ada rekomendasi UAT dan Issue, daftar **Postponed**, dan **Recently 
 - **Indikator**: progres harian dan estimasi beban kerja dibanding panjang hari kerja (atur di Settings).
 - **Notes for today**: catatan bebas, tersimpan otomatis (ada status "Saving…/Saved").
 - **Carried over**: rencana hari sebelumnya yang belum selesai. Pilih **Add to today** atau **Drop**.
+
+### 4.6a Weekly Report (email update mingguan)
+
+Halaman `/weekly` menyusun email update mingguan dari data task Anda, dengan format seperti ini:
+
+```
+Hi Mas Hizky, Mas Ari,
+
+Berikut update saya untuk week 2 kemarin, dan plan untuk week 3.
+
+Done last week:
+- Add DG Validation during TO Audit — signed off (100%)
+
+This week:
+- New linehaul booking & charging scheme — in progress (80%), target: clear overdue milestone, ekspektasi selesai Rabu
+
+Blocked / At risk:
+- New linehaul booking & charging scheme — ada bug di create price SLS, perlu adjustment dari engineer
+
+Product Dash updated: Yes
+
+Regards,
+Nama Anda
+```
+
+**Isi tiap bagian dibuat otomatis:**
+- **Done last week**: task yang selesai (Done) minggu lalu, ditambah fitur UAT yang di-**sign off** minggu lalu (ditulis "signed off (100%)"). Task yang sama dengan fitur yang sudah di-sign off tidak ditulis dua kali. Issue yang selesai minggu lalu tersedia tetapi tidak dicentang.
+- **This week**: task yang In Progress atau In Review, serta task To Do, Waiting, atau Blocked yang jatuh tempo paling lambat akhir minggu itu atau berprioritas High/Critical. Backlog tidak ikut. Setiap baris berisi status dan progres, **langkah berikutnya** (Next action) ditulis sebagai `target: ...`, dan `ekspektasi selesai {hari}` bila deadline-nya jatuh di minggu itu. Task Blocked dengan progres di atas 0 tetap ditulis "in progress", karena pekerjaannya jalan terus dan hambatannya ditulis di bagian bawah.
+- **Blocked / At risk**: task Blocked (beserta alasan blocker-nya), task Waiting for Others (**menunggu siapa**, dan berapa hari bila 3 hari atau lebih), task yang melewati target, issue High/Critical atau yang sudah di-eskalasi, dan proyek berstatus At Risk. Yang tidak mendesak ada di daftar tetapi tidak dicentang.
+
+**Cara memakainya:**
+1. Buka **Weekly Report**. Minggu dipilih otomatis: Senin sampai Rabu melaporkan minggu lalu dan merencanakan minggu ini, Kamis sampai Minggu melaporkan minggu ini dan merencanakan minggu depan. Ganti dengan **Previous week** / **Next week**, atau **Auto** untuk kembali.
+2. Di kiri, **centang atau hilangkan centang** pada setiap baris, ubah kalimatnya sesukanya, atau tambahkan baris sendiri dengan **Add a line**. Kolom kecil di bawah baris menunjukkan task asalnya (misalnya TP-0012), dan itu tidak ikut ke email.
+3. Isi **To**, **Cc**, dan **Greet (names)** (misalnya `Mas Hizky, Mas Ari`), lalu pilih **Product Dash updated**: Yes, No, N/A, atau tidak ditulis. Subjek otomatis (`Weekly Plan Resanda — Aug Week 3`) dan bisa diubah.
+4. Di kanan ada **Preview** yang langsung berubah. Klik **Copy email** (daftar poin ikut terbawa saat ditempel ke Gmail atau Outlook), atau **Copy as plain text**, **Copy subject**, atau **Open in email app**.
+5. Buka **Template settings** untuk mengatur sapaan, kalimat pembuka, judul bagian, teks untuk daftar kosong, tanda tangan, dan nama pengirim. Klik **Save as my default** supaya minggu depan semuanya sudah siap. Tanda yang bisa dipakai: `{names}`, `{name}`, `{month}`, `{week}`, `{lastWeek}`, `{thisWeek}`.
+
+Penomoran minggu mengikuti kebiasaan Anda: Senin sampai Minggu, dan minggu itu milik bulan tempat hari Kamisnya berada. Jadi 17 sampai 23 Agustus 2026 adalah **Aug Week 3**.
+
+TaskPilot **tidak mengirim email**. Anda menyalinnya ke aplikasi email sendiri. Perubahan pada baris (centang dan kata-kata) berlaku untuk minggu itu saja, sedangkan yang disimpan lewat **Save as my default** adalah templatenya. **Open in email app** hanya mengisi penerima bila Anda mengetik alamat email.
 
 ### 4.7 Waiting & Blocked
 
