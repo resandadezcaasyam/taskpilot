@@ -3,23 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import {
-  BarChart3, CalendarDays, Columns3, Compass, FlaskConical, FolderKanban, History, Hourglass,
-  LayoutDashboard, ListChecks, Mail, Menu, Moon, Plus, Search, Settings, Siren, Sun, X, Zap, type LucideIcon,
-} from "lucide-react";
+import { Menu, Moon, Plus, Search, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { ReminderPoller, RemindersBell, type ReminderItem } from "@/components/reminders-ui";
+import { SidebarNav } from "@/components/sidebar-nav";
 import { TaskFormDialog } from "@/components/task-form-dialog";
 import { saveThemePreference } from "@/actions/settings";
-import { NAV_ITEMS } from "@/lib/nav";
-import { cn } from "@/lib/utils";
-
-const ICONS: Record<string, LucideIcon> = {
-  "layout-dashboard": LayoutDashboard, "list-checks": ListChecks, compass: Compass, sun: Sun,
-  "folder-kanban": FolderKanban, "columns-3": Columns3, "flask-conical": FlaskConical, siren: Siren,
-  hourglass: Hourglass, "calendar-days": CalendarDays, "bar-chart-3": BarChart3, history: History, settings: Settings, zap: Zap, mail: Mail,
-};
 
 export function AppShell({
   projects,
@@ -61,37 +51,7 @@ export function AppShell({
     void saveThemePreference(next);
   };
 
-  const nav = (
-    <nav aria-label="Main" className="flex flex-col gap-0.5 px-3 pb-4">
-      {NAV_ITEMS.map((item) => {
-        const Icon = ICONS[item.icon];
-        const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => setMenuOpen(false)}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              "flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13.5px] transition-colors",
-              active ? "bg-primary-soft font-medium text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
-            )}
-          >
-            <Icon className="size-4" />
-            <span className="flex-1">{item.label}</span>
-            {(badges[item.href] ?? 0) > 0 && (
-              <span className="min-w-5 rounded-full bg-red-500 px-1.5 text-center text-[10.5px] font-semibold leading-[18px] text-white" aria-label={`${badges[item.href]} reminders`}>
-                {badges[item.href]}
-              </span>
-            )}
-            {item.phase && (
-              <span className="rounded bg-muted px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground">P{item.phase}</span>
-            )}
-          </Link>
-        );
-      })}
-    </nav>
-  );
+  const nav = <SidebarNav pathname={pathname} badges={badges} onNavigate={() => setMenuOpen(false)} />;
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[248px_1fr]">

@@ -61,27 +61,29 @@ Salin file versi baru ke folder proyek dengan **tetap menjaga** `data/`, `upload
 
 **Menu samping (sidebar):**
 
-| Menu | Alamat | Untuk apa |
-| --- | --- | --- |
-| Dashboard | `/` | Ringkasan hari ini: angka penting, 5 rekomendasi teratas, kesehatan proyek, reminder |
-| My Tasks | `/tasks` | Semua task: cari, filter, ubah status, aksi massal |
-| Brain Dump | `/capture` | **Cara tercepat** memasukkan banyak kegiatan sekaligus dari teks |
-| Next Actions | `/next-actions` | "Apa yang sebaiknya saya kerjakan sekarang?" lengkap dengan alasannya |
-| Weekly Report | `/weekly` | **Email update mingguan otomatis**: apa yang selesai minggu lalu, rencana minggu ini, dan yang terhambat |
-| Today Planner | `/today` | Rencana hari ini: pilih, urutkan, catat kerja, catatan harian |
-| Projects | `/projects` | Proyek, progres, milestone, UAT dan issue terkait |
-| Kanban Board | `/kanban` | Papan kolom status, geser kartu untuk mengubah status |
-| UAT Tracker | `/uat` | Fitur UAT, test case, hasil, bukti, sign-off |
-| Issue & Escalation | `/issues` | Pelacakan issue dari dilaporkan sampai ditutup, termasuk eskalasi |
-| Waiting & Blocked | `/waiting` | Semua yang tertahan: menunggu siapa, sudah berapa hari, kapan follow-up |
-| Calendar | `/calendar` | Bulan/minggu/hari: deadline, follow-up, target UAT, milestone |
-| Analytics | `/analytics` | Grafik produktivitas dan tren dari data Anda |
-| Activity History | `/activity` | Riwayat semua perubahan |
-| Settings | `/settings` | Preferensi, bobot skor, reminder, backup, ekspor/restore |
+Menu samping dikelompokkan menjadi lima bagian supaya mudah dipindai: **Overview** (rencana harian), **Task & Planning** (mengelola task), **Work Management** (pekerjaan operasional), **Insights & Reports** (laporan), dan **System** (pengaturan, selalu di bagian bawah). Klik judul grup untuk melipat atau membukanya. Semua grup terbuka secara bawaan, pilihan Anda diingat saat aplikasi dibuka lagi, dan grup yang berisi halaman yang sedang Anda buka otomatis terbuka. Pada layar yang pendek, menu bisa di-scroll sendiri sementara logo tetap di atas.
+
+| Grup | Menu | Alamat | Untuk apa |
+| --- | --- | --- | --- |
+| Overview | Dashboard | `/` | Ringkasan hari ini: angka penting, 5 rekomendasi teratas, kesehatan proyek, reminder |
+|  | Today Planner | `/today` | Rencana hari ini: pilih, urutkan, catat kerja, catatan harian |
+|  | Next Actions | `/next-actions` | "Apa yang sebaiknya saya kerjakan sekarang?" lengkap dengan alasannya |
+| Task & Planning | My Tasks | `/tasks` | Semua task: cari, filter, ubah status, aksi massal |
+|  | Brain Dump | `/capture` | **Cara tercepat** memasukkan banyak kegiatan sekaligus dari teks |
+|  | Projects | `/projects` | Proyek, progres, milestone, UAT dan issue terkait |
+|  | Kanban Board | `/kanban` | Papan kolom status, geser kartu untuk mengubah status |
+|  | Calendar | `/calendar` | Bulan/minggu/hari: deadline, follow-up, target UAT, milestone |
+| Work Management | UAT Tracker | `/uat` | Fitur UAT, test case, hasil, bukti, sign-off |
+|  | Issue & Escalation | `/issues` | Pelacakan issue dari dilaporkan sampai ditutup, termasuk eskalasi |
+|  | Waiting & Blocked | `/waiting` | Semua yang tertahan: menunggu siapa, sudah berapa hari, kapan follow-up |
+| Insights & Reports | Weekly Report | `/weekly` | **Email update mingguan otomatis**: apa yang selesai minggu lalu, rencana minggu ini, dan yang terhambat |
+|  | Analytics | `/analytics` | Grafik produktivitas dan tren dari data Anda |
+|  | Activity History | `/activity` | Riwayat semua perubahan |
+| System | Settings | `/settings` | Preferensi, bobot skor, reminder, backup, ekspor/restore |
 
 **Bilah atas (header):** kotak **pencarian** (tekan `/` di mana saja untuk langsung mengetik), ikon **lonceng** (reminder aktif), tombol **tema** terang/gelap, dan tombol **Quick add**.
 
-**Badge merah di sidebar** menunjukkan jumlah reminder yang perlu perhatian di Today Planner, Waiting & Blocked, UAT Tracker, dan Issue & Escalation.
+**Badge merah di sidebar** menunjukkan jumlah reminder yang perlu perhatian di Today Planner, Waiting & Blocked, UAT Tracker, dan Issue & Escalation. Jika grupnya dilipat, jumlahnya dijumlahkan di judul grup, dan titik biru kecil menandai grup yang berisi halaman aktif.
 
 ---
 

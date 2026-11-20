@@ -42,6 +42,8 @@ A step-by-step guide to every screen, with the shortcuts, formulas and a trouble
 
 ## What it does
 
+The sidebar groups the screens into five collapsible sections: **Overview** (Dashboard, Today Planner, Next Actions), **Task & Planning** (My Tasks, Brain Dump, Projects, Kanban Board, Calendar), **Work Management** (UAT Tracker, Issue & Escalation, Waiting & Blocked), **Insights & Reports** (Weekly Report, Analytics, Activity History) and **System** (Settings, kept at the bottom). Click a group heading to collapse or expand it; your choice is remembered, and the group holding the page you are on always opens.
+
 **Dashboard.** Eight clickable summary cards (each opens the matching filtered list), Today's Focus (top five recommendations), project health, upcoming deadlines, reminders and recent activity. Everything is a live database query. Display name, layout and date format are settings.
 
 **Brain Dump** (`/capture`, in the sidebar). The fast way to enter many activities. Type or paste one line per activity, and TaskPilot reads the details from the words, shows an editable preview, and saves them all at once. Everything beyond the title is optional. Pick "To do", "Doing" or **"Already done"** for the whole batch (ideal for a recap of what you did today), and a default project and priority. Shortcuts you can add to any line:
